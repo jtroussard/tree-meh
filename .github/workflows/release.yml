@@ -1,0 +1,53 @@
+name: Release Workflow
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  test_and_lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Run linting
+        run: npm run lint
+
+  build_and_publish:
+    needs: test_and_lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build extension
+        run: npm run build
+      
+      - name: Package extension
+        run: npx vsce package
+      
+      - name: Publish extension
+        run: npx vsce publish --pat ${{ secrets.VSCE_PERSONAL_ACCESS_TOKEN }}
