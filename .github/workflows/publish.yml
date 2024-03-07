@@ -18,8 +18,11 @@ jobs:
     - name: Install Dependencies
       run: npm ci
 
+    - name: Build Extension
+      run: npm run build
+
     - name: Publish to Visual Studio Marketplace
       uses: HaaLeo/publish-vscode-extension@v1
       with:
-        pat: ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
-        dryRun: true
+        pat: ${{ secrets.VSCE_PERSONAL_ACCESS_TOKEN }}
+        registryUrl: https://marketplace.visualstudio.com

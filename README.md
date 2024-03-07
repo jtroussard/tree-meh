@@ -56,6 +56,10 @@ Configuration settings coming soon.
 
 ## Release Notes
 
+### 1.6.0
+
+DEVELOPER ENHANCEMENT: Adds test and publishing automation
+
 ### 1.5.0
 
 Windows path compatibility
