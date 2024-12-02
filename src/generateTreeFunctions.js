@@ -3,92 +3,83 @@ const fs = require('fs');
 const vscode = require('vscode');
 const path = require('path');
 
-/**
- * Generates a tree representation of the directory structure and copies it to the clipboard.
- *
- * @param {vscode.Uri} resource - The resource representing the selected directory in the Explorer.
- */
+const { validateResource } = require('./utils/validations');
+const { convertToRegex } = require('./utils/conversions');
+
+function generateTreeEverything(resource) {
+    console.info('Generating everything tree...');
+    try {
+        const normalizedPath = validateResource(resource);
+        if (!normalizedPath) {
+            const error = new Error('Invalid resource');
+            console.error(`Validation failed: ${resource}`);
+            throw error;
+        }
+
+        let treeOutput = tree(
+            normalizedPath,
+            {
+                allFiles: true,
+                dirsFirst: false,
+                dirsOnly: false,
+                sizes: false,
+                exclude: [/.git\//], // perf issues, ignoring git/
+                maxDepth: Number.POSITIVE_INFINITY,
+                reverse: false,
+                trailingSlash: false,
+                ascii: false,
+            }
+        );
+
+        vscode.env.clipboard.writeText(treeOutput);
+        vscode.window.showInformationMessage('Entire project tree copied to clipboard!');
+        console.info('Tree generatred successfully!');
+        return;
+    } catch (e) {
+        vscode.window.showErrorMessage(`Something went wrong: ${e.message}`);
+        console.error('Error generating tree:', e);
+    }
+}
+
 function generateTree(resource) {
-    // Make sure the resource argument is valid
-    if (!resource) {
-        vscode.window.showErrorMessage('Missing resource for generating trees.');
-        return;
-    }
-
-    // Be compatible with windows style paths as well
-    let normalizedPath = path.normalize(resource.fsPath);
-    // Validate the path string
-    if (typeof normalizedPath !== 'string') {
-        vscode.window.showErrorMessage(`Invalid path data type for generating trees: ${typeof normalizedPath}`);
-        return;
-    }
-    if (normalizedPath.length === 0) {
-        vscode.window.showErrorMessage(`Invalid path length for generating trees: ${normalizedPath.length}`);
-        return;
-    }
-    if (!fs.existsSync(normalizedPath)) {
-        vscode.window.showErrorMessage(`Invalid path. Path does not exist: ${normalizedPath}`, normalizedPath);
-        return;
-    };
-
-    // Now that we know the resource is safe we can grab the path and generate the tree
+    console.info('Generating tree...');
     try {
-        let treeOutput = tree(normalizedPath);
-        vscode.env.clipboard.writeText(treeOutput);
-        vscode.window.showInformationMessage('Tree copied to clipboard!');
-        return;
-    }
-    catch (e) {
-        console.log(e);
-        vscode.window.showErrorMessage(`Something went wrong: ${e}`);
-        return;
-    }
-}
+        const normalizedPath = validateResource(resource);
+        if (!normalizedPath) {
+            const error = new Error('Invalid resource');
+            console.error(`Validation failed: ${resource}`);
+            throw error;
+        }
 
-function generateTreeLessDependencyDirs(resource) {
-    // Make sure the resource argument is valid
-    if (!resource) {
-        vscode.window.showErrorMessage('Missing resource for generating trees.');
-        return;
-    }
-
-    // Be compatible with windows style paths as well
-    let normalizedPath = path.normalize(resource.fsPath);
-    // Validate the path string
-    if (typeof normalizedPath !== 'string') {
-        vscode.window.showErrorMessage(`Invalid path data type for generating trees: ${typeof normalizedPath}`);
-        return;
-    }
-
-    if (normalizedPath.length === 0) {
-        vscode.window.showErrorMessage(`Invalid path length for generating trees: ${normalizedPath.length}`);
-        return;
-    }
-    if (!fs.existsSync(normalizedPath)) {
-        vscode.window.showErrorMessage(`Invalid path. Path does not exist: ${normalizedPath}`, normalizedPath);
-        return;
-    };
-
-    // Now that we know the resource is safe we can grab the path and generate the tree
-    try {
-        const options = {
-            allFiles: true,
-            exclude: [/node_modules/, /venv/],
+        // Process options to match tree-node-cli options contract.
+        const config = vscode.workspace.getConfiguration("treematic");
+        const treeOptions = {
+            allFiles: config.get("allFiles", true),
+            dirsFirst: config.get("dirsFirst", false),
+            dirsOnly: config.get("dirsOnly", false),
+            sizes: config.get("sizes", false),
+            exclude: convertToRegex(config.get("exclude", [/node_modules\//, /venv\//, /.git\//])),
+            maxDepth: config.get("maxDepth", -1) === -1 ? Number.POSITIVE_INFINITY : config.get("maxDepth"),
+            reverse: config.get("reverse", false),
+            trailingSlash: config.get("trailingSlash", false),
+            ascii: config.get("ascii", true),
         };
-        let treeOutput = tree(normalizedPath, options);
+        console.info(`Tree options loaded: ${JSON.stringify(treeOptions)}`);
+
+        let treeOutput = tree(normalizedPath, treeOptions);
+        
         vscode.env.clipboard.writeText(treeOutput);
-        vscode.window.showInformationMessage('Tree less dependency directories copied to clipboard!');
+        vscode.window.showInformationMessage('Project tree copied to clipboard!');
+        console.info('Tree generatred successfully!');
         return;
-    }
-    catch (e) {
-        console.log(e);
-        vscode.window.showErrorMessage(`Something went wrong: ${e}`);
+    } catch (e) {
+        vscode.window.showErrorMessage(`Something went wrong: ${e.message}`);
+        console.error('Error generating tree:', e);
         return;
     }
 }
-
 
 module.exports = {
+    generateTreeEverything,
     generateTree,
-    generateTreeLessDependencyDirs
 };

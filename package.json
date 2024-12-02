@@ -1,13 +1,13 @@
 {
-  "name": "tree-meh",
-  "displayName": "Tree Meh Extension",
+  "name": "treematic",
+  "displayName": "Treematic Extension",
   "description": "Convenient way to copy directory tree to clipboard. Basically a wrapper around tree-node-cli.",
   "version": "1.6.3",
   "icon": "images/icon.png",
   "publisher": "DevLife4Me",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jtroussard/tree-meh"
+    "url": "https://github.com/jtroussard/treematic"
   },
   "engines": {
     "vscode": "^1.81.0"
@@ -20,8 +20,9 @@
   "contributes": {
     "commands": [
       {
-        "command": "tree-meh.generateTree",
-        "title": "Everything",
+        "command": "treematic.generateTree",
+        "title": "Generate Tree",
+        "description": "Generates a tree representation of the directory structure for a given resource, using the options configured in the 'treematic' extension settings, and copies it to the clipboard.",
         "args": [
           {
             "resource": "${resource}"
@@ -29,8 +30,9 @@
         ]
       },
       {
-        "command": "tree-meh.generateTreeLessDependencyDirs",
-        "title": "Less Dependency Directories",
+        "command": "treematic.generateTreeEverything",
+        "title": "Generate Tree Everything (Include all directories and files)",
+        "description": "Generates a tree representation of the directory structure for a given resource, including all directories and all files, and copies it to the clipboard.",
         "args": [
           {
             "resource": "${resource}"
@@ -42,18 +44,18 @@
       "explorer/context": [
         {
           "when": "explorerResourceIsFolder && resourceScheme == 'file' && explorerViewletVisible",
-          "submenu": "tree-meh.submenu",
-          "group": "tree-meh"
+          "submenu": "treematic.submenu",
+          "group": "treematic"
         }
       ],
-      "tree-meh.submenu": [
+      "treematic.submenu": [
         {
-          "command": "tree-meh.generateTree",
+          "command": "treematic.generateTree",
           "when": "explorerResourceIsFolder && resourceScheme == 'file' && explorerViewletVisible",
           "group": "navigation@1"
         },
         {
-          "command": "tree-meh.generateTreeLessDependencyDirs",
+          "command": "treematic.generateTreeEverything",
           "when": "explorerResourceIsFolder && resourceScheme == 'file' && explorerViewletVisible",
           "group": "navigation@1"
         }
@@ -61,42 +63,114 @@
     },
     "submenus": [
       {
-        "id": "tree-meh.submenu",
-        "label": "Copy Directory Tree"
+        "id": "treematic.submenu",
+        "label": "Copy Project Tree"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Treematic Configuration",
+      "properties": {
+        "treematic.allFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "All files are shown by default. Flip this value to false to hide hidden files. Those files beginning with a dot are labeled hidden files."
+        },
+        "treematic.firsFirst": {
+          "type": "boolean",
+          "default": false,
+          "description": "List directories before files."
+        },
+        "treematic.dirsOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "List directories only."
+        },
+        "treematic.sizes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show file sizes."
+        },
+        "treematic.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "node_modules/",
+            ".git/",
+            ".vscode/",
+            "dist/",
+            "target/",
+            "build/",
+            "logs/",
+            "coverage/",
+            ".idea/",
+            ".DS_Store",
+            "Thumbs.db",
+            "__pycache__/",
+            "temp/",
+            "cache/"
+          ],
+          "description": "List of Regular Expressions that match files and directories to be excluded from the tree. To exclude files under a directory and keep the directory itself be sure to include the trailing slash in the RegEx."
+        },
+        "treematic.maxDepth": {
+          "type": "number",
+          "default": -1,
+          "description": "Maximum depth to display in the directory tree. -1 represents infinity."
+        },
+        "treematic.reverse": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sort the output in reverse alphabetic order."
+        },
+        "treematic.trailingSlash": {
+          "type": "boolean",
+          "default": false,
+          "description": "Appends a trailing slash behind directories."
+        },
+        "treematic.ascii": {
+          "type": "boolean",
+          "default": false,
+          "description": "Turn on ASCII line graphics."
+        }
+      }
+    }
   },
   "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
     "test": "node ./test/runTest.js",
+    "coverage": "c8 --check-coverage --reporter=html --reporter=text npm run test",
     "clean": "rm -rf dist && rm -rf node_modules && rm -rf package-lock.json",
     "clean-install": "npm cache clean --force && rm -rf node_modules package-lock.json && npm install",
     "build": "rm -rf dist && esbuild ./src/extension.js --bundle --outfile=dist/extension.js --platform=node --target=node14 --external:vscode",
+    "build-dev": "rm -rf dist && esbuild ./src/extension.js --bundle --outfile=dist/extension.js --platform=node --target=node14 --external:vscode --sourcemap",
     "debug-build": "webpack --display-error-details",
     "help": "webpack --help",
     "audit": "echo add npm audit to your pipeline when you get around to building the deployment pipeline",
     "patch": "echo add this to your automated pipeline once it is up and running npm version patch",
     "minor": "echo add this to your automated pipeline once it is up and running npm version minor",
     "major": "echo add this to your automated pipeline once it is up and running npm version major",
-    "publish": "vsce publish"
+    "publish": "vsce publish",
+    "lint": "prettier --write .",
+    "lint:check": "prettier --check ."
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.1",
+    "@types/mocha": "^10.0.10",
     "@types/node": "20.2.5",
     "@types/vscode": "^1.81.0",
-    "@vscode/test-electron": "^2.3.2",
+    "@vscode/test-electron": "^2.4.1",
     "chalk": "5.3.0",
     "esbuild": "^0.20.1",
-    "eslint": "8.47.0",
     "glob": "^8.1.0",
-    "mocha": "^10.2.0",
+    "mocha": "^10.8.2",
+    "prettier": "^3.3.3",
     "proxyquire": "^2.1.3",
     "sinon": "^15.2.0",
-    "vscode": "1.1.37"
+    "vscode": "^1.1.34"
   },
   "dependencies": {
+    "c8": "^10.1.2",
     "child_process": "1.0.2",
     "path-browserify": "1.0.1",
     "tree-node-cli": "1.6.0"

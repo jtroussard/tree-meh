@@ -1,9 +1,9 @@
-# Tree-Meh VS Code Extension
+# Treematic VS Code Extension
 
-**Extension Name**: Tree-Meh
+**Extension Name**: Treematic
 
 **Summary**:
-The Tree-Meh is a straight-forward and useful Visual Studio Code extension designed to simplify your project exploration, analysis, and documentation efforts. It empowers developers by providing an easy way to generate and copy a string representation of their project's directory structure directly to the clipboard. No more fussing with the terminal and those wonky and awkward attempts to precisly select and copy form the terminal screen. With just a few clicks, you can capture the essence of your project's layout and share it seamlessly with others, enabling more productive discussions and collaborative brainstorming. Whether you're seeking to refactor, design, or communicate ideas about your project's architecture, this extension will become an staple of your developement toolkit.
+The Treematic is a straight-forward and useful Visual Studio Code extension designed to simplify your project exploration, analysis, and documentation efforts. It empowers developers by providing an easy way to generate and copy a string representation of their project's directory structure directly to the clipboard. No more fussing with the terminal and those wonky and awkward attempts to precisly select and copy form the terminal screen. With just a few clicks, you can capture the essence of your project's layout and share it seamlessly with others, enabling more productive discussions and collaborative brainstorming. Whether you're seeking to refactor, design, or communicate ideas about your project's architecture, this extension will become an staple of your developement toolkit.
 
 **Features**:
 
@@ -13,7 +13,7 @@ The Tree-Meh is a straight-forward and useful Visual Studio Code extension desig
 
 **Getting Started**:
 
-1. Install the "Tree-Meh" extension from the Visual Studio Code Marketplace.
+1. Install the "Treematic" extension from the Visual Studio Code Marketplace.
 
 2. Navigate to the Explorer view and right-click on a directory within your project.
 
@@ -39,8 +39,8 @@ The Tree-Meh is a straight-forward and useful Visual Studio Code extension desig
 
 **Feedback and Support**:
 
-We value your feedback! If you encounter any issues or have suggestions for improvement, please feel free to [raise an issue on GitHub](https://github.com/jtroussard/tree-meh).
+We value your feedback! If you encounter any issues or have suggestions for improvement, please feel free to [raise an issue on GitHub](https://github.com/jtroussard/treematic).
 
 **License**:
 
-This extension is released under the [MIT License](https://github.com/jtroussard/tree-meh/blob/main/LICENSE).
+This extension is released under the [MIT License](https://github.com/jtroussard/treematic/blob/main/LICENSE).

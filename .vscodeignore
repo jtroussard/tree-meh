@@ -36,3 +36,7 @@ logs/**
 
 # Ignore src dir
 src/**
+
+# Other
+.DS_Store
+difference

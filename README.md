@@ -1,8 +1,12 @@
-# Tree Meh
+# Treematic
+
+## Pin 
+
+Figure out what's up with everything and config diff with .git/ directory, then finish wiring, then verify locally, then write tests.
 
 ## Summary
 
-The Tree-Meh leverages the tree-node-cli command to swiftly produce and copy string representations of project structures/directories. This enhances collaborative discussions on project architecture and design by providing a convenient way to share and analyze project layouts.  
+The Treematic leverages the tree-node-cli command to swiftly produce and copy string representations of project structures/directories. This enhances collaborative discussions on project architecture and design by providing a convenient way to share and analyze project layouts.  
 
 ### Example Output
 ```bash
@@ -26,7 +30,7 @@ my-project
 
 <img src="https://jtroussard.github.io/static-site/http-1692229795084.gif" alt="gif demo for feature: sub menu action everything" width="90%">
 
-1. Install the "Tree-Meh" extension from the Visual Studio Code Marketplace.
+1. Install the "Treematic" extension from the Visual Studio Code Marketplace.
 
 2. Navigate to the Explorer view and right-click on a directory within your project.
 
@@ -70,21 +74,21 @@ Adds new context option to copy tree less dependency directories. (ex. node_modu
 
 ### 1.0.0
 
-Initial production release of Tree Meh directory tree copy utility.
+Initial production release of Treematic directory tree copy utility.
 
 ## Development Setup
 
-To work on the Tree-Meh extension on your local machine, follow these steps:
+To work on the Treematic extension on your local machine, follow these steps:
 
 1. **Clone the Repository**:
 Open a terminal and navigate to the directory where you want to clone the extension's repository. Then, run the following command:
 
-`git clone git@github.com:jtroussard/tree-meh.git`
+`git clone git@github.com:jtroussard/treematic.git`
 
 2. **Navigate to the Extension's Directory**:
 Change your working directory to the newly cloned repository:
 
-`cd tree-meh`
+`cd treematic`
 
 3. **Install Dependencies**:
 Use npm to install the required dependencies for the extension. Run the following command:
@@ -108,8 +112,8 @@ You can then test your extension within Visual Studio Code by pressing `F5`, mak
 
 ## Feedback/Support
 
-We value your feedback! If you encounter any issues or have suggestions for improvement, please feel free to [raise an issue on GitHub](https://github.com/jtroussard/tree-meh).
+We value your feedback! If you encounter any issues or have suggestions for improvement, please feel free to [raise an issue on GitHub](https://github.com/jtroussard/treematic).
 
 ## LICENSE
 
-This extension is released under the [MIT License](https://github.com/jtroussard/tree-meh/blob/main/LICENSE).
+This extension is released under the [MIT License](https://github.com/jtroussard/treematic/blob/main/LICENSE).
