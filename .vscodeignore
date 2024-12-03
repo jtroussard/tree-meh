@@ -4,15 +4,18 @@
 jsconfig.json
 tsconfig.json
 webpack.config.js
-,gitignore
+.gitignore
 .git
 .eslintrc.json
+.github/**
+.prettierignore
 
 # Ignore development and test-related files
 **/build/**
 **/out/**
 **/test/**
 **/temp/**
+**/coverage/**
 
 # Ignore documentation
 **/docs/**

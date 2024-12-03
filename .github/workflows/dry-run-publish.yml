@@ -1,0 +1,55 @@
+name: Dry Run Publish
+
+on:
+  pull_request:
+    branches: [workflow-testing]
+
+jobs:
+  dry-run-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # Step 4: Install and Start XVFB for Headless Environment
+      - name: Install XVFB
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Start XVFB
+        run: Xvfb :99 -screen 0 1280x1024x24 &
+        env:
+          DISPLAY: ':99'
+
+      # Step 5: Run Tests
+      - name: Run Tests
+        run: npm test
+        env:
+          DISPLAY: ':99'
+
+      # Step 6: Run Coverage Check
+      - name: Run Coverage Check
+        run: npm run test:ci
+        env:
+          DISPLAY: ':99'
+
+      - name: Build Extension
+        run: npm run build
+
+      - name: Package Extension
+        run: npx vsce package
+      
+      - name: Validate VSIX Package
+        run: |
+          if [ ! -f *.vsix ]; then
+            echo "VSIX package not found!"
+            exit 1
+          fi
+          echo "VSIX package successfully created."
