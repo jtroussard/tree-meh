@@ -11,8 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Fixed 
 
-- Bump minimatch and vscode #74
-- Broken link in README.md
+* Bump minimatch and vscode #74
+* Broken link in README.md #75
+* Update dependencies #76
+  * Sinon 15 -> 18
+  * Assorted package-lock updates (automated via cherry-pick)
 
 ## [2.0.0] - 2024-12-02
 
